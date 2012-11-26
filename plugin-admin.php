@@ -355,6 +355,7 @@ class Simple_Security_Admin extends Simple_Security {
 	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
+	<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5'  target='_blank'>Rate and Review Plugin</a></p>
 	
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
