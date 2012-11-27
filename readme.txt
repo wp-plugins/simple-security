@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 Access Log to track Logins and Failed Login Attempts
 
@@ -76,3 +76,5 @@ If we choose your testimonial or website we can link to your site and generate s
 = 1.0.1 =
 * Resolved issues with auto blocking IP addresses
 
+= 1.0.2 =
+* Removed extra error logging dev functions

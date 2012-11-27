@@ -102,14 +102,11 @@ class Simple_Security_Admin extends Simple_Security {
 			
 		global $wpdb;
 		$ss_plugin = get_option('simple_security_plugin');
-		//simple_security_plugin[ip_autoblock_fail_count]
 		
 		$today = date_i18n('Y-m-d');
 		$sql = "SELECT ip FROM " . $this->table . " WHERE login_result = 0 and time LIKE '$today%' GROUP BY ip HAVING COUNT(ip) > ".$ss_plugin['ip_autoblock_fail_count'];
 		$results = $wpdb->get_results($sql);
 		
-		error_log($sql);
-		error_log(count($results));
 		if($results){
 			if(!$blacklist = get_option('simple_security_ip_blacklist')){
 				$blacklist = array();
