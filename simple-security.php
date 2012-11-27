@@ -2,17 +2,17 @@
 
 class Simple_Security {
 	
-	public $version                 = '1.0';
+	public $version       	= '1.0.1';
 	
-	public $db_version = "1.0";
+	public $db_version 		= "1.0";
 	
-	public $table = 'simple_security_access_log';
+	public $table 			= 'simple_security_access_log';
     
-    public $opt_name = 'simple_security';
+    public $opt_name 		= 'simple_security';
 	
-	public $login_success = 0;
+	public $login_success 	= 0;
 	
-	public $data_labels = array();
+	public $data_labels 	= array();
 	
 	
 	

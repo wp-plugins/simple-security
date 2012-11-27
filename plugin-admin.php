@@ -101,20 +101,29 @@ class Simple_Security_Admin extends Simple_Security {
 	function security_check(){
 			
 		global $wpdb;
+		$ss_plugin = get_option('simple_security_plugin');
+		//simple_security_plugin[ip_autoblock_fail_count]
 		
-		$today = date('Y-m-d');
-		$sql = "SELECT ip FROM " . $this->table . " WHERE login_result = 0 and time LIKE '$today%' GROUP BY ip HAVING COUNT(ip) > 5";
+		$today = date_i18n('Y-m-d');
+		$sql = "SELECT ip FROM " . $this->table . " WHERE login_result = 0 and time LIKE '$today%' GROUP BY ip HAVING COUNT(ip) > ".$ss_plugin['ip_autoblock_fail_count'];
 		$results = $wpdb->get_results($sql);
 		
+		error_log($sql);
+		error_log(count($results));
 		if($results){
-			$blacklist = get_option('simple_security_ip_blacklist');
-			foreach($results as $result){
-				$blacklist[] = $result->ip;
+			if(!$blacklist = get_option('simple_security_ip_blacklist')){
+				$blacklist = array();
 			}
+			
+			foreach($results as $result){
+				if( !in_array($result->ip, $blacklist)){
+					$blacklist[] = $result->ip;
+				}
+			}
+				
 			update_option('simple_security_ip_blacklist', $blacklist);
 			
 		}
-	
 	}
 	
 
