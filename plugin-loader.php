@@ -3,7 +3,7 @@
 Plugin Name: Simple Security
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
 Description: Access Log to track Logins and Failed Login Attempts
-Version: 1.0.2
+Version: 1.0.3
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */
@@ -24,12 +24,10 @@ function simple_security_activate() {
 	
 }
 
-// require simple optimizer Plugin if PHP 5 installed
+// require Plugin if PHP 5 installed
 if ( version_compare( phpversion(), '5.0', '>=') ) {
 	define('SSec_LOADER', __FILE__);
 
-	error_reporting(E_ALL); 
-	
 	require_once(dirname(__FILE__) . '/access-log-admin-widget.class.php');
 	require_once(dirname(__FILE__) . '/user-last-login.class.php');
 	require_once(dirname(__FILE__) . '/access-log.class.php');
@@ -48,8 +46,6 @@ if ( version_compare( phpversion(), '5.0', '>=') ) {
 		//drop db table, and cleanup options
 		register_deactivation_hook( __FILE__, array(&$simple_security, 'uninstall_db') );	
 			
-	
 	}
-
 }
 ?>

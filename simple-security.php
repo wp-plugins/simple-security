@@ -2,7 +2,7 @@
 
 class Simple_Security {
 	
-	public $version       	= '1.0.2';
+	public $version       	= '1.0.3';
 	
 	public $db_version 		= "1.0";
 	
@@ -24,7 +24,13 @@ class Simple_Security {
 	 */
 	protected $_options = array(
 		'simple_security_plugin' => array(
-			
+			'enable_access_log' => true,
+			'enable_ip_blacklist' => true,
+			'enable_admin_widget' => true,
+			'enable_last_login_column' => true,
+			'enable_ip_autoblock' => true,
+			'ip_autoblock_fail_count' => 5,
+			'ip_blacklist_message' => 'Access Denied'
 		)
 	);
 	
@@ -67,6 +73,12 @@ class Simple_Security {
 		
 		//Delete options
 		delete_option('simple_security_db_version');
+		delete_option('simple_security_plugin');
+		delete_option('simple_security');
+		delete_option('simple_security_installed');
+		delete_option('simple_security_ip_blacklist');
+		
+		delete_transient( 'simple_security_nag' );
 		
 	}
 	
@@ -193,6 +205,11 @@ class Simple_Security {
 		foreach($this->_options as $option => $value) {
 			add_option($option, $value, null, 'no');	
 		}
+		
+		//7 day initial nag
+		$expiration = 60 * 60 * 24 * 7;
+		$simple_security_nag = "true";
+		set_transient( 'simple_security_nag', $simple_security_nag, $expiration );
 	}
 	
 	

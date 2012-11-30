@@ -134,7 +134,7 @@ class Simple_Security_Access_Log{
 
         //display options
         add_screen_option($per_page_field, $args);
-        $_per_page = get_option('users_page_login_log_per_page');
+        $_per_page = get_option('users_page_access_log_per_page');
 
         //create custom list table class to display log data
         $this->log_table = new Custom_List_Table;
@@ -160,7 +160,7 @@ class Simple_Security_Access_Log{
 	
 	
 	function ip_blacklist(){
-	
+		$blacklist = array();		
 		if(isset($_POST['action']) && "add_blacklist_ip" == $_POST['action'] && is_admin()){
 			foreach($_POST['simple_security_ip_blacklist'] as $ip){
 				if($ip != ''){

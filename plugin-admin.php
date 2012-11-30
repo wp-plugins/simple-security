@@ -56,6 +56,10 @@ class Simple_Security_Admin extends Simple_Security {
 		// push options page link, when generating admin menu
 		add_action('admin_menu', array(&$this, 'adminMenu'));
 		
+		add_filter('contextual_help', array(&$this,'adminHelp'), 10, 3);
+		
+		
+		
 		$ss_options = get_option('simple_security_plugin'); 
 		
 		if($ss_options['enable_access_log']){
@@ -84,15 +88,107 @@ class Simple_Security_Admin extends Simple_Security {
 		//enable the admin dashboard access log widget
 		if($ss_options['enable_admin_widget']){
 			add_action( 'init', array($this, 'setup_admin_dash') );
-		}	
-		
-		
+		}			
+ 
+		add_action('admin_notices', array($this, 'activation_notice_settings'));
+		add_action('admin_init', array($this, 'nag_ignore'));
+
 	}
+	
+	
+	
+	public function adminHelp($contextual_help, $screen_id, $screen){
+	
+		global $simple_security_admin_page;
+		
+		if ($screen_id == $simple_security_admin_page) {
+			
+			$support_the_dev = $this->display_support_us();
+			$screen->add_help_tab(array(
+				'id' => 'developer-support',
+				'title' => "Support the Developer",
+				'content' => "<h2>Support the Developer</h2><p>".$support_the_dev."</p>"
+			));
+			
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-support',
+				'title' => "Plugin Support",
+				'content' => "<h2>Plugin Support</h2><p>For Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+			));
+
+
+			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
+			
+		}
+		
+	}		
+	
+
+
+
+	public function display_support_us(){
+	
+		ob_start();
+	
+		
+						
+		echo '<p><b>Thank You for using the Simple Security Plugin for WordPress!</b></p>';
+		echo "<p>Please take a moment to <b>Support the Developer</b> by doing some of the following items:</p>";
+		$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
+
+		echo "<li><a href='$rate_url' target='_blank' title='Click Here to Rate and Review this Plugin on WordPress.org'>Click Here</a> to Rate and Review this Plugin on WordPress.org!</li>";
+		echo "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
+		echo "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
+		echo "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+	
+	
+		return ob_get_clean();
+	
+	}
+
+
+
+	function activation_notice_settings(){
+		global $current_user ;
+		global $pagenow;
+		if(isset($_GET['page'])){
+			if ( $pagenow == 'options-general.php' || $pagenow == 'users.php'){
+				if ( $_GET['page'] == 'simple-security/plugin-admin.php'  || $_GET['page'] == 'access_log' ) {
+					$user_id = $current_user->ID;
+					if ( false === ( $simple_security_nag = get_transient( 'simple_security_nag' ) ) ) {
+						echo '<div class="updated">';
+						echo $this->display_support_us();
+						echo "<br>";
+						echo '<p><a href="'.$_SERVER['REQUEST_URI'].'&simple_security_nag_ignore=0" >Click Here to Dismiss this Message.</a></p>';
+						echo "</div>";
+					}
+				}
+			}
+		}
+	}
+	
+	
+	function nag_reset($user_id){
+		delete_user_meta($user_id, 'simple_security_nag_ignore');
+	}
+	
+	
+	
+	function nag_ignore() {
+		if ( isset($_GET['simple_security_nag_ignore']) && '0' == $_GET['simple_security_nag_ignore'] ) {
+			 $expiration = 60 * 60 * 24 * 30;
+			 $simple_security_nag = "true";
+			 set_transient( 'simple_security_nag', $simple_security_nag, $expiration );
+		}
+	}
+		
+	 
+	
 	
 	
 	function setup_admin_dash(){
 		$admin_widget = new Access_Log_Admin_Widget();
-		
 		add_action('wp_dashboard_setup', array($admin_widget, 'add_admin_widget') );
 	}
 	
@@ -104,7 +200,7 @@ class Simple_Security_Admin extends Simple_Security {
 		$ss_plugin = get_option('simple_security_plugin');
 		
 		$today = date_i18n('Y-m-d');
-		$sql = "SELECT ip FROM " . $this->table . " WHERE login_result = 0 and time LIKE '$today%' GROUP BY ip HAVING COUNT(ip) > ".$ss_plugin['ip_autoblock_fail_count'];
+		$sql = "SELECT ip FROM " . $this->table . " WHERE login_result = 0 and time LIKE '$today%' GROUP BY ip HAVING COUNT(ip) >= ".$ss_plugin['ip_autoblock_fail_count'];
 		$results = $wpdb->get_results($sql);
 		
 		if($results){
@@ -132,7 +228,9 @@ class Simple_Security_Admin extends Simple_Security {
 		
 		if($blocked_ip_addresses = get_option('simple_security_ip_blacklist')){
 			if( in_array($ip, $blocked_ip_addresses) ){
-				die('Access Denied');
+				$ss_plugin = get_option('simple_security_plugin');
+				$message = $ss_plugin['ip_blacklist_message'];
+				die($message);
 			}
 		}
 	}
@@ -201,7 +299,8 @@ class Simple_Security_Admin extends Simple_Security {
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SSec_LOADER)) {
-			$links[] = '<a href="http://MyWebsiteAdvisor.com/">Visit Us Online</a>';
+			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
+			$links[] = '<a href="'.$rate_url.'" target="_blank" title="Click Here to Rate and Review this Plugin on WordPress.org">Rate This Plugin</a>';
 		}
 		
 		return $links;
@@ -212,9 +311,10 @@ class Simple_Security_Admin extends Simple_Security {
 	 */
 	public function adminMenu() {		
 		// add option in admin menu, for settings
-		$plugin_page = add_options_page('Simple Security Plugin Options', 'Simple Security', 8, __FILE__, array(&$this, 'optionsPage'));
+		global $simple_security_admin_page;
+		$simple_security_admin_page = add_options_page('Simple Security Plugin Options', 'Simple Security', 8, __FILE__, array(&$this, 'optionsPage'));
 
-		add_action('admin_print_styles-' . $plugin_page,     array(&$this, 'installStyles'));
+		add_action('admin_print_styles-' . $simple_security_admin_page,     array(&$this, 'installStyles'));
 	}
 	
 	/**
@@ -359,9 +459,8 @@ class Simple_Security_Admin extends Simple_Security {
 
 	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/simple-security/' target='_blank'>Plugin Homepage</a></p>
 	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
-	<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5'  target='_blank'>Rate and Review Plugin</a></p>
+	<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>
 	
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
@@ -430,14 +529,11 @@ class Simple_Security_Admin extends Simple_Security {
 					<?php $this->HtmlPrintBoxHeader('security-settings',__('Automatic IP Address Blocking Settings','security-settings'),false); ?>
 					
 					<?php $fail_count = (strlen($ss_options['ip_autoblock_fail_count']) > 0) ? $ss_options['ip_autoblock_fail_count']: '10'; ?>
-					<p>Each login failure is recorded in the access log.  If any IP Address has more than <?php echo $fail_count; ?> failed login attempts, they are blocked for the rest of that day.</p>
+					<p>Each login failure is recorded in the access log.  If any IP Address has more than <?php echo $fail_count; ?> failed login attempts, they are added to the IP Address Blacklist.</p>
 					
 					<p>Number of failed login attempts per day before IP address is blocked:<br />
 					<input type="text" name='simple_security_plugin[ip_autoblock_fail_count]' value='<?php echo $fail_count; ?>' /></p>
 					
-					<?php $message = (strlen($ss_options['ip_autoblock_message']) > 0) ? $ss_options['ip_autoblock_message']: 'Access Denied'; ?>
-					<p>Message to display to blocked users:<br />
-					<input type="text" class='widefat'  name='simple_security_plugin[ip_autoblock_message]' value='<?php echo $message; ?>'  /></p>
 					
 					<input type="submit" class='button' name='Submit' value='Save Settings' />
 					<?php $this->HtmlPrintBoxFooter(false); ?>

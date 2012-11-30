@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 Access Log to track Logins and Failed Login Attempts
 
@@ -43,7 +43,9 @@ To-do:
 
 = Plugin doesn't work ... =
 
-Please specify as much information as you can to help me debug the problem. Check in your error.log if you can. Please send screenshots as well as a detailed description of the problem.
+Please specify as much information as you can to help us debug the problem. 
+Check in your error.log if you can. 
+Please send screenshots as well as a detailed description of the problem.
 
 
 
@@ -78,3 +80,14 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 1.0.2 =
 * Removed extra error logging dev functions
+
+= 1.0.3 =
+* removed leftover error_reporing(E_ALL) in plugin_loader.php file
+* resolved issues with undefined index notifications
+* added rate this plugin links
+* fixed ip blacklist custom message which was not displaying properly
+* fixed auto blacklist system to use the proper number of failed attempts as specified
+* fixed access log to display proper number of records as specified in the screen options tab
+
+
+
