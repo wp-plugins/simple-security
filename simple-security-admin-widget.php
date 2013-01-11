@@ -65,7 +65,7 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 	
 	function get_widget_data(){
 		global $access_log, $wpdb;
-		$sql = "SELECT * FROM {$access_log->table} ORDER BY time DESC";
+		$sql = "SELECT * FROM {$access_log->db_table} ORDER BY time DESC";
 		$result = $wpdb->get_results($sql, ARRAY_A );
 		return $result;
 	}
@@ -130,7 +130,6 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 		  
 	  }
 	}
-
 
 
 }

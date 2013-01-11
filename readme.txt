@@ -3,8 +3,10 @@ Name: Simple Security
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 2.9
-Tested up to: 3.4.2
-Stable tag: 1.0.3
+Tested up to: 3.5
+Stable tag: 1.1
+Donate link: http://MyWebsiteAdvisor.com/donations
+
 
 Access Log to track Logins and Failed Login Attempts
 
@@ -71,15 +73,12 @@ If we choose your testimonial or website we can link to your site and generate s
 
 == Changelog ==
 
+= 1.1 =
+* updated settings page to use WP settings API
+* changed the hook for removing access log DB table from plugin deactivation to plugin uninstall hook.
+* updated plugin settings page with tabs, rather than scrolling down the page
+* reorgainzed entire plugin file layout
 
-= 1.0 =
-* Initial release
-
-= 1.0.1 =
-* Resolved issues with auto blocking IP addresses
-
-= 1.0.2 =
-* Removed extra error logging dev functions
 
 = 1.0.3 =
 * removed leftover error_reporing(E_ALL) in plugin_loader.php file
@@ -88,6 +87,17 @@ If we choose your testimonial or website we can link to your site and generate s
 * fixed ip blacklist custom message which was not displaying properly
 * fixed auto blacklist system to use the proper number of failed attempts as specified
 * fixed access log to display proper number of records as specified in the screen options tab
+
+= 1.0.2 =
+* Removed extra error logging dev functions
+
+= 1.0.1 =
+* Resolved issues with auto blocking IP addresses
+
+
+= 1.0 =
+* Initial release
+
 
 
 

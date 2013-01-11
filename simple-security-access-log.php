@@ -5,9 +5,10 @@
 class Simple_Security_Access_Log{
 
 
-	public $table = 'simple_security_access_log';
+	public $db_table;
     
-    public $opt_name = 'simple_security';
+    public $opt_name;
+	
 	
 	public $login_success = 0;
 	
@@ -19,8 +20,7 @@ class Simple_Security_Access_Log{
 	public function __construct() {
 	
 		global $wpdb;
-		$this->table = $wpdb->prefix . $this->table;
-
+		
 		//For translation purposes
         $this->data_labels = array(
             'Successful'        => __('Successful', 'simple_security'),
@@ -41,9 +41,18 @@ class Simple_Security_Access_Log{
 	}
 	
 	
+	public function init(){
+	
+		add_action( 'admin_head', array($this, 'admin_header') );
+		add_action( 'admin_head', array($this, 'screen_options') );
+		add_action( 'admin_menu', array($this, 'simple_security_admin_menu') );
+		
+	}
+	
 	
 	function simple_security_admin_menu(){
-        add_submenu_page( 'users.php', __('Simple Access Log', 'simple_security'), __('Access Log', 'simple_security'), 'list_users', 'access_log', array(&$this, 'log_manager') );
+		global $simple_security_access_log_page;
+       $simple_security_access_log_page = add_submenu_page( 'users.php', __('Simple Access Log', 'simple_security'), __('Access Log', 'simple_security'), 'list_users', 'access_log', array(&$this, 'log_manager') );
     }
 	
 	
@@ -55,9 +64,15 @@ class Simple_Security_Access_Log{
         $log_table->items = $this->log_get_data();
         $log_table->prepare_items();
 
-		echo '<div class="wrap srp">';
+
+		echo '<div class="wrap">';
+		
+			echo '<div id="icon-users" class="icon32"><br /></div>';
+			
             echo '<h2>' . __('Simple Security Access Log', 'simple-security') . '</h2>';
-			echo "<a href='".get_option('siteurl')."/wp-admin/options-general.php?page=simple-security/plugin-admin.php'>Simple Security Plugin Settings</a>";
+			
+			echo "<p><a href='".get_option('siteurl')."/wp-admin/options-general.php?page=simple-security-settings'>Simple Security Plugin Settings</a></p>";
+			
             echo '<div class="tablenav top">';
                 echo '<div class="alignleft actions">';
                     echo $this->date_filter();
@@ -96,8 +111,9 @@ class Simple_Security_Access_Log{
 			echo "})";
 			echo "</script>";
 			
-			$ss_options = get_option('simple_security_plugin');
-			if($ss_options['enable_ip_blacklist']){
+			
+			$ss_options = get_option($this->opt_name);
+			if($ss_options['basic_settings']['enable_ip_blacklist']){
 				echo $this->ip_blacklist();
 			}
 			
@@ -137,7 +153,7 @@ class Simple_Security_Access_Log{
         $_per_page = get_option('users_page_access_log_per_page');
 
         //create custom list table class to display log data
-        $this->log_table = new Custom_List_Table;
+        $this->log_table = new Simple_Security_Access_Log_List_Table;
     }
 
 
@@ -151,7 +167,7 @@ class Simple_Security_Access_Log{
         if( is_array($where) && !empty($where) )
             $where = 'WHERE ' . implode(' AND ', $where);
 
-        $sql = "SELECT * FROM $this->table $where ORDER BY time DESC";
+        $sql = "SELECT * FROM $this->db_table $where ORDER BY time DESC";
         $data = $wpdb->get_results($sql, 'ARRAY_A');
 
         return $data;
@@ -167,14 +183,14 @@ class Simple_Security_Access_Log{
 					$blacklist[] = $ip;
 				}
 			}
-			update_option('simple_security_ip_blacklist', $blacklist);
+			update_option('simple-security-ip-blacklist', $blacklist);
 		} 
 	
 		$i = 0;
-		$blacklist = get_option('simple_security_ip_blacklist');
+		$blacklist = get_option('simple-security-ip-blacklist');
 		
 		echo "<h2>Blocked IP Addresses</h2>";
-		echo "<a href='".get_option('siteurl')."/wp-admin/options-general.php?page=simple-security/plugin-admin.php'>IP Address Blacklist Settings</a>";
+		echo "<a href='".get_option('siteurl')."/wp-admin/options-general.php?page=simple-security-settings'>IP Address Blacklist Settings</a>";
 		echo "<form method='post'>";
 		echo '<input type="hidden" name="page" value="access_log" />';
 		echo '<input type="hidden" name="action" value="add_blacklist_ip" />';
@@ -184,7 +200,7 @@ class Simple_Security_Access_Log{
 		echo "</p>";
 		echo "<hr>";
 		
-		if($blacklist = get_option('simple_security_ip_blacklist')){
+		if($blacklist = get_option('simple-security-ip-blacklist')){
 			foreach($blacklist as $ip){
 				echo "<p>Blocked IP Address: <input type='text' name='simple_security_ip_blacklist[ $i ]' value='$ip'></p>";
 				$i++;
@@ -224,7 +240,7 @@ class Simple_Security_Access_Log{
 
 	function date_filter(){
         global $wpdb;
-        $sql = "SELECT DISTINCT YEAR(time) as year, MONTH(time)as month FROM {$this->table} ORDER BY YEAR(time), MONTH(time) desc";
+        $sql = "SELECT DISTINCT YEAR(time) as year, MONTH(time)as month FROM {$this->db_table} ORDER BY YEAR(time), MONTH(time) desc";
         $results = $wpdb->get_results($sql);
 
         if(!$results)

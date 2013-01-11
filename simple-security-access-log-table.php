@@ -5,7 +5,9 @@ if(!class_exists('WP_List_Table')){
 }
 
 
-class Custom_List_Table extends WP_List_Table{
+class Simple_Security_Access_Log_List_Table extends WP_List_Table{
+
+	public $data_labels;
 
     function __construct(){
 	
@@ -15,10 +17,29 @@ class Custom_List_Table extends WP_List_Table{
         parent::__construct( array(
             'singular'  => 'user',     //singular name of the listed records
             'plural'    => 'users',    //plural name of the listed records
-            'ajax'      => false        //does this table support ajax?
+            'ajax'      => true        //does this table support ajax?
         ) );
 
-        $this->data_labels = $access_log->data_labels;
+        //$this->data_labels = $access_log->data_labels;
+
+
+		$this->data_labels = array(
+			'Successful'        => __('Successful', 'simple_security'),
+			'Failed'            => __('Failed', 'simple_security'),
+			'Login'             => __('Login', 'simple_security'),
+			'User Agent'        => __('User Agent', 'simple_security'),
+			'Login Redirect'    => __('Login Redirect', 'simple_security'),
+			'id'                => __('#', 'simple_security'),
+			'uid'               => __('User ID', 'simple_security'),
+			'user_login'        => __('Username', 'simple_security'),
+			'user_role'         => __('User Role', 'simple_security'),
+			'time'              => __('Time', 'simple_security'),
+			'ip'                => __('IP Address', 'simple_security'),
+			'login_result'      => __('Login Result', 'simple_security'),
+			'data'              => __('Data', 'simple_security')
+		);
+
+
 
     }
 	
@@ -48,8 +69,11 @@ class Custom_List_Table extends WP_List_Table{
             case 'login_result':
                 if ( '' == $item[$column_name]) return '';
 				
-                if ( '1' == $item[$column_name] ) {
+                if ( '1' === $item[$column_name] ) {
 					 return '<div class="login-successful" title="'.$this->data_labels['Successful'].'">' . $this->data_labels['Successful'] . '</div>';
+					 
+				}elseif ( '0' === $item[$column_name] ) { 
+					return '<div class="login-failed" title="'.$this->data_labels['Failed'].'">' . $this->data_labels['Failed'] . '</div>';
 				}else{
 				 	return '<div class="login-failed" title="'.$this->data_labels['Failed'].'">' . $this->data_labels['Failed'] . '</div>';
 				 }
@@ -155,11 +179,11 @@ class Custom_List_Table extends WP_List_Table{
         $where2 = 'WHERE ' . implode(' AND ', $where2);
         $where3 = 'WHERE ' . implode(' AND ', $where3);
 
-        $sql1 = "SELECT * FROM {$access_log->table} {$where1}";
+        $sql1 = "SELECT * FROM {$access_log->db_table} {$where1}";
         $a = $wpdb->query($sql1);
-        $sql2 = "SELECT * FROM {$access_log->table} {$where2}";
+        $sql2 = "SELECT * FROM {$access_log->db_table} {$where2}";
         $s = $wpdb->query($sql2);
-        $sql3 = "SELECT * FROM {$access_log->table} {$where3}";
+        $sql3 = "SELECT * FROM {$access_log->db_table} {$where3}";
         $f = $wpdb->query($sql3);
 
         //if date filter is set, adjust views label to reflect the date
