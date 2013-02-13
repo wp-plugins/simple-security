@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 1.1
+Stable tag: 1.1.1
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -17,9 +17,19 @@ Simple Security Plugin for WordPress is an Access Log to track Logins and Failed
 You can add a widget to the admin dashboard for logins and failed login attempts.
 
 
+
+Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1):
+
+http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1
+
+
+
 Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
+
+Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/
+
 
 We are looking for testimonials and live examples of our plugins on your website!  
 Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/  
@@ -50,12 +60,19 @@ Check in your error.log if you can.
 Please send screenshots as well as a detailed description of the problem.
 
 
+Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1):
+
+http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1
 
 
 
 Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
+
+Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/
+
+
 
 We are looking for testimonials and live examples of our plugins on your website!
 Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/
@@ -68,10 +85,20 @@ If we choose your testimonial or website we can link to your site and generate s
 2. Admin Dashboard Widget
 3. Admin Settings Page
 4. WordPress User Manager with Additional Last Login Column
+5. IP Address Blacklist
 
 
 
 == Changelog ==
+
+
+= 1.1.1 =
+* added seperate page for IP Address Blacklist
+* added tabbed navigation to admin UI for settings, access log, and blacklist
+* updated screenshots
+* added tutorial video
+* added link to upgrade to ultra version
+
 
 = 1.1 =
 * updated settings page to use WP settings API

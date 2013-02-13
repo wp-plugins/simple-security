@@ -45,6 +45,10 @@ class Simple_Security_Settings_Page{
 	
 	
 	
+	public $extra_tabs = array();
+	
+	
+	
 	
 	function __construct( $option_name ){
 	
@@ -67,8 +71,12 @@ class Simple_Security_Settings_Page{
 	function init() {
 
 		//register sections
-		foreach ($this->settings_sections as $section) {
-			add_settings_section( $section['id'], $section['title'], '__return_false', $this->option_name  );
+			foreach ($this->settings_sections as $section) {
+			if(isset($section['callback'])){
+				add_settings_section( $section['id'], $section['title'], $section['callback'], $this->option_name  );
+			}else{
+				add_settings_section( $section['id'], $section['title'], '__return_false', $this->option_name  );
+			}
 		}
 
 		//register fields
@@ -213,6 +221,11 @@ class Simple_Security_Settings_Page{
 			echo "<a class='nav-tab$class' href='?page=".$this->option_name."&tab=".$section['id']."'>".$section['title']."</a>";
 	
 		}
+		foreach( $this->extra_tabs as $extra_tab ){
+			$class = ( $tab == $extra_tab['id'] ) ? ' nav-tab-active' : '';
+			echo "<a class='nav-tab$class' href='".$extra_tab['link']."'>".$extra_tab['title']."</a>";
+		}
+		
 		echo '</h3>';
 
 	}
@@ -350,6 +363,20 @@ class Simple_Security_Settings_Page{
 	}
 
 
+
+
+
+	/**
+	 * Add settings section
+	 *
+	 * @param array $section single setting section array
+	 */
+	public function add_section( $section ){
+		$sections = $this->settings_sections;
+		$sections[] = $section;
+		$this->settings_sections = $sections;
+	
+	}
 
 
 	/**

@@ -14,7 +14,7 @@ class Simple_Security_Utilities{
 	public function init(){
 	
 		//update the settings system
-		register_activation_hook( SSec_LOADER, array(&$this, 'migrate_options') );	
+		//register_activation_hook( SSec_LOADER, array(&$this, 'migrate_options') );	
 		
 		//add db table
 		register_activation_hook( SSec_LOADER, array(&$this, 'install_db') );	

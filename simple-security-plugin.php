@@ -5,8 +5,10 @@
 class Simple_Security_Plugin{
 
 
+	private $debug = false;
+
 	//plugin version number
-	private $version = "1.1";
+	private static $version = "1.1.1";
 	
 	//holds the currently installed db version
 	private $installed_db_version;
@@ -80,6 +82,9 @@ class Simple_Security_Plugin{
 		//setup the last login tracking	
 		$this->last_login_init();
 			
+		//setup IP address blacklist	
+		$this->blacklist_init();
+		
 		
 		
 		//enable the admin dashboard access log widget
@@ -109,7 +114,7 @@ class Simple_Security_Plugin{
 	private function last_login_init(){
 	
 		//setup custom column in user list to display last login
-		if($this->opt['basic_settings']['enable_last_login_column']){
+		if("true" == $this->opt['basic_settings']['enable_last_login_column']){
 		
 			$access_log_last_login = new Access_Log_Last_Login();
 			$access_log_last_login->init();
@@ -120,7 +125,7 @@ class Simple_Security_Plugin{
 	
 	//setup access log table
 	private function access_log_init(){
-		if($this->opt['basic_settings']['enable_access_log']){
+		if("true" == $this->opt['basic_settings']['enable_access_log']){
 			global $access_log;
 			$access_log = new Simple_Security_Access_Log();
 			$this->access_log = $access_log;
@@ -131,10 +136,20 @@ class Simple_Security_Plugin{
 		}
 	}
 	
+	//setup access log tools
+	private function blacklist_init(){
+		if("true" == $this->opt['basic_settings']['enable_ip_blacklist']){
+			$this->blacklist = new Simple_Security_IP_Blacklist;
+			$this->blacklist->opt_name = $this->setting_name;
+			
+			$this->blacklist->init();
+		}
+	}
+	
 	
 	//setup access log tools
 	private function tools_init(){
-		if($this->opt['basic_settings']['enable_access_log']){
+		if("true" == $this->opt['basic_settings']['enable_access_log']){
 			$this->tools = new Simple_Security_Tools;
 			$this->tools->db_table = $this->db_table;
 			$this->tools->opt_name = $this->setting_name;
@@ -165,10 +180,17 @@ class Simple_Security_Plugin{
 
 		$this->settings_page  = new Simple_Security_Settings_Page( $this->setting_name );
 		
+		$this->settings_page->extra_tabs = array(
+			array('id'=>'ip_blacklist', 'title'=>'IP Address Blacklist', 'link' => admin_url()."users.php?page=ip_blacklist"),		
+			array('id'=>'access_log', 'title'=>'Access Log', 'link' => admin_url()."users.php?page=access_log")
+		);
+				
         //set the settings
         $this->settings_page->set_sections( $this->get_settings_sections() );
         $this->settings_page->set_fields( $this->get_settings_fields() );
 		$this->settings_page->set_sidebar( $this->get_settings_sidebar() );
+
+		$this->build_optional_tabs();
 
         //initialize settings
         $this->settings_page->init();
@@ -183,7 +205,7 @@ class Simple_Security_Plugin{
 
 	
 	public function setup_admin_dash(){
-		if($this->opt['basic_settings']['enable_admin_widget']){
+		if('true' == $this->opt['basic_settings']['enable_admin_widget']){
 			if(is_admin() && current_user_can('administrator')){
 				$admin_widget = new Access_Log_Admin_Widget();
 				add_action('wp_dashboard_setup', array($admin_widget, 'add_admin_widget') );
@@ -227,7 +249,7 @@ class Simple_Security_Plugin{
                     'label' => __( 'Access Log', $this->plugin_name ),
                     'desc' => 'Enable and Display WordPress Login <a href="'.site_url().'/wp-admin/users.php?page=access_log" >Access Log</a>',
                     'type' => 'radio',
-					'default' => 'true',
+					//'default' => 'true',
                     'options' => array(
                         'true' => 'Enabled',
                         'false' => 'Disabled'
@@ -238,7 +260,7 @@ class Simple_Security_Plugin{
                     'label' => __( 'Dashboard Widget', $this->plugin_name ),
                     'desc' => 'Enable and Display Access Log Widget on <a href="'.site_url().'/wp-admin/">Admin Dashboard</a>',
                     'type' => 'radio',
-					'default' => 'true',
+					//'default' => 'true',
                     'options' => array(
                         'true' => 'Enabled',
                         'false' => 'Disabled'
@@ -249,7 +271,7 @@ class Simple_Security_Plugin{
                     'label' => __( 'Track Last Login', $this->plugin_name ),
                     'desc' => 'Enable and Display Last Login Tracking Column on <a href="'.site_url().'/wp-admin/users.php">Users List</a>',
                    	'type' => 'radio',
-					'default' => 'true',
+					//'default' => 'true',
                     'options' => array(
                         'true' => 'Enabled',
                         'false' => 'Disabled'
@@ -260,7 +282,7 @@ class Simple_Security_Plugin{
 					'label' => __( 'IP Auto Block', $this->plugin_name ),
 					'desc' => __( 'Enable Automatic IP Address Blocking', $this->plugin_name ),
 					'type' => 'radio',
-					'default' => 'true',
+					//'default' => 'true',
 					'options' => array(
                         'true' => 'Enabled',
                         'false' => 'Disabled'
@@ -269,9 +291,9 @@ class Simple_Security_Plugin{
 				array(
                     'name' => 'enable_ip_blacklist',
                     'label' => __( 'IP Blacklist', $this->plugin_name ),
-                    'desc' => 'Enable <a href="'.site_url().'/wp-admin/users.php?page=access_log">IP Address Blacklist</a>',
+                    'desc' => 'Enable <a href="'.site_url().'/wp-admin/users.php?page=ip_blacklist">IP Address Blacklist</a>',
                     'type' => 'radio',
-					'default' => 'true',
+					//'default' => 'true',
                     'options' => array(
                         'true' => 'Enabled',
                         'false' => 'Disabled'
@@ -318,7 +340,7 @@ class Simple_Security_Plugin{
 			
 			echo "<h2>".$this->plugin_title." Plugin Settings</h2>";
 			
-			$this->show_access_log_link();
+			//$this->show_access_log_link();
 			
 			$this->settings_page->show_tab_nav();
 			
@@ -367,8 +389,9 @@ class Simple_Security_Plugin{
 	public function admin_help($contextual_help, $screen_id, $screen){
 	
 		global $simple_security_access_log_page;
+		global $simple_security_ip_blacklist;
 		
-		if ($screen_id == $this->page_menu || $screen_id == $simple_security_access_log_page) {
+		if ($screen_id == $this->page_menu || $screen_id == $simple_security_access_log_page || $screen_id == $simple_security_ip_blacklist) {
 				
 			$support_the_dev = $this->display_support_us();
 			$screen->add_help_tab(array(
@@ -376,6 +399,16 @@ class Simple_Security_Plugin{
 				'title' => "Support the Developer",
 				'content' => "<h2>Support the Developer</h2><p>".$support_the_dev."</p>"
 			));
+			
+			
+			$video_id = "8S_cHDZfkRg";
+			$video_code = '<iframe width="500" height="350" src="http://www.youtube.com/embed/'.$video_id.'?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe>';
+			$screen->add_help_tab(array(
+				'id' => 'tutorial-video',
+				'title' => "Tutorial Video",
+				'content' => "<h2>{$this->plugin_title} Tutorial Video</h2><p>$video_code</p>"
+			));
+			
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-support',
@@ -399,7 +432,7 @@ class Simple_Security_Plugin{
 	
 		ob_start();
 		
-			echo "<p>Plugin Version: ".$this->version."</p>";
+			echo "<p>Plugin Version: ". self::get_version()  ."</p>";
 			
 			echo "<p>Server OS: ".PHP_OS."</p>";
 			
@@ -420,13 +453,16 @@ class Simple_Security_Plugin{
 	}
 	
 	
+	public function get_version(){
+		return self::$version;
+	}
 	
 	
 	
-	
-	private function get_settings_sidebar(){
+	public function get_settings_sidebar(){
 	
 		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-security/' target='_blank'>Plugin Homepage</a></p>
+			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 			<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
@@ -441,16 +477,33 @@ class Simple_Security_Plugin{
 			<p><a href='http://www.youtube.com/mywebsiteadvisor'  target='_blank'>Watch us on YouTube!</a></p>
 			<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>";
 	
+	
+		$upgrade = "<p>
+			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-security-ultra/'  target='_blank'>Upgrade to Simple Security Ultra!</a><br />
+			<br />
+			<b>Features:</b><br />
+			-Email Alert Notifications<br />
+			-Blocked IP Address Alert<br />
+			-Failed Login Attempt Alert<br />
+			-Succecssful Login Attempt Alert<br />
+			-Priority Support License</br>
+			</p>";
+			
 		$sidebar_info = array(
 			array(
 				'id' => 'diagnostic',
 				'title' => 'Plugin Diagnostic Check',
-				'content' => $this->do_diagnostic_sidebar()		
+				'content' => self::do_diagnostic_sidebar()		
 			),
 			array(
 				'id' => 'resources',
 				'title' => 'Plugin Resources',
 				'content' => $plugin_resources	
+			),
+			array(
+				'id' => 'upgrade',
+				'title' => 'Plugin Upgrades',
+				'content' => $upgrade	
 			),
 			array(
 				'id' => 'more_plugins',
@@ -473,9 +526,31 @@ class Simple_Security_Plugin{
 
 
 
+	//build optional tabs, using debug tools class worker methods as callbacks
+	private function build_optional_tabs(){
+		if(true === $this->debug){
+		
+			//general debug settings
+			$plugin_debug = array(
+				'id' => 'plugin_debug',
+				'title' => __( 'Plugin Settings Debug', $this->plugin_name ),
+				'callback' => array($this, 'show_plugin_settings')
+			);
 	
+			$this->settings_page->add_section( $plugin_debug );
+			
+		}
+	}
  
 
+	// displays the plugin options array
+	public function show_plugin_settings(){
+				
+		echo "<pre>";
+			print_r(get_option($this->setting_name));
+		echo "</pre>";
+			
+	}
 
 
 

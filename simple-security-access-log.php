@@ -52,7 +52,10 @@ class Simple_Security_Access_Log{
 	
 	function simple_security_admin_menu(){
 		global $simple_security_access_log_page;
-       $simple_security_access_log_page = add_submenu_page( 'users.php', __('Simple Access Log', 'simple_security'), __('Access Log', 'simple_security'), 'list_users', 'access_log', array(&$this, 'log_manager') );
+		
+       	$simple_security_access_log_page = add_submenu_page( 'users.php', __('Simple Access Log', 'simple_security'), __('Access Log', 'simple_security'), 'list_users', 'access_log', array(&$this, 'log_manager') );
+	   
+	   
     }
 	
 	
@@ -65,13 +68,17 @@ class Simple_Security_Access_Log{
         $log_table->prepare_items();
 
 
+		echo Simple_Security_Plugin::display_social_media(); 
+		
 		echo '<div class="wrap">';
 		
 			echo '<div id="icon-users" class="icon32"><br /></div>';
 			
             echo '<h2>' . __('Simple Security Access Log', 'simple-security') . '</h2>';
 			
-			echo "<p><a href='".get_option('siteurl')."/wp-admin/options-general.php?page=simple-security-settings'>Simple Security Plugin Settings</a></p>";
+			$this->show_tab_nav();
+			
+			//echo "<p><a href='".get_option('siteurl')."/wp-admin/options-general.php?page=simple-security-settings'>Simple Security Plugin Settings</a></p>";
 			
             echo '<div class="tablenav top">';
                 echo '<div class="alignleft actions">';
@@ -114,7 +121,7 @@ class Simple_Security_Access_Log{
 			
 			$ss_options = get_option($this->opt_name);
 			if($ss_options['basic_settings']['enable_ip_blacklist']){
-				echo $this->ip_blacklist();
+				//echo $this->ip_blacklist();
 			}
 			
 
@@ -123,6 +130,30 @@ class Simple_Security_Access_Log{
 
 
 
+
+
+	private function show_tab_nav(){
+	
+		$tabs = array(
+			array('id' => 'basic_settings', 'title' => 'Basic Settings', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=basic_settings'),
+			array('id' => 'ip_blacklist', 'title' => 'IP Address Blacklist', 'link' => 'users.php?page=ip_blacklist'),			
+			array('id' => 'access_log', 'title' => 'Access Log', 'link' => 'users.php?page=access_log'),
+
+		);
+			
+	
+		echo '<h3 class="nav-tab-wrapper">';
+		
+		foreach( $tabs as $tab ){
+			$class = ( $tab['id'] == $_GET['page'] ) ? ' nav-tab-active' : '';
+			echo "<a class='nav-tab$class' href='".$tab['link']."'>".$tab['title']."</a>";
+		}
+		
+		echo '</h3>';
+		
+	}
+	
+	
 
 	function screen_options(){
 
@@ -174,8 +205,10 @@ class Simple_Security_Access_Log{
     }
 	
 	
-	
+	/**
 	function ip_blacklist(){
+	
+	
 		$blacklist = array();		
 		if(isset($_POST['action']) && "add_blacklist_ip" == $_POST['action'] && is_admin()){
 			foreach($_POST['simple_security_ip_blacklist'] as $ip){
@@ -210,7 +243,7 @@ class Simple_Security_Access_Log{
 		echo "</form>";
 	
 	}
-	
+	**/
 	
 	function make_where_query(){
         $where = false;
