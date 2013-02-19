@@ -8,7 +8,7 @@ class Simple_Security_Plugin{
 	private $debug = false;
 
 	//plugin version number
-	private static $version = "1.1.1";
+	private static $version = "1.1.2";
 	
 	//holds the currently installed db version
 	private $installed_db_version;
@@ -401,8 +401,24 @@ class Simple_Security_Plugin{
 			));
 			
 			
+			$video_code = "<style>
+			.videoWrapper {
+				position: relative;
+				padding-bottom: 56.25%; /* 16:9 */
+				padding-top: 25px;
+				height: 0;
+			}
+			.videoWrapper iframe {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+			</style>";
+		
 			$video_id = "8S_cHDZfkRg";
-			$video_code = '<iframe width="500" height="350" src="http://www.youtube.com/embed/'.$video_id.'?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe>';
+			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/'.$video_id.'?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
 				'title' => "Tutorial Video",
@@ -540,6 +556,13 @@ class Simple_Security_Plugin{
 			$this->settings_page->add_section( $plugin_debug );
 			
 		}
+		
+		$plugin_tutorial = array(
+			'id' => 'plugin_tutorial',
+			'title' => __( 'Plugin Tutorial Video', $this->plugin_name ),
+			'callback' => array(&$this, 'show_plugin_tutorual')
+		);
+		$this->settings_page->add_section( $plugin_tutorial );
 	}
  
 
@@ -550,6 +573,31 @@ class Simple_Security_Plugin{
 			print_r(get_option($this->setting_name));
 		echo "</pre>";
 			
+	}
+
+
+	public function show_plugin_tutorual(){
+	
+		echo "<style>
+		.videoWrapper {
+			position: relative;
+			padding-bottom: 56.25%; /* 16:9 */
+			padding-top: 25px;
+			height: 0;
+		}
+		.videoWrapper iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		</style>";
+
+		$video_id = "8S_cHDZfkRg";
+		echo sprintf( '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/%1$s?rel=0&vq=hd720" frameborder="0" allowfullscreen ></iframe></div>', $video_id);
+		
+	
 	}
 
 
@@ -570,6 +618,12 @@ class Simple_Security_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SSec_LOADER)) {
+			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-security-ultra/';
+			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
+			
+			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/';
+			$links[] = '<a href="'.$tutorial_url.'" target="_blank" title="Click Here to View the Plugin Video Tutorial!">Tutorial Video</a>';
+			
 			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
 			$links[] = '<a href="'.$rate_url.'" target="_blank" title="Click Here to Rate and Review this Plugin on WordPress.org">Rate This Plugin</a>';
 		}

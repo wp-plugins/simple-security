@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -44,11 +44,21 @@ Requirements:
 To-do:
 
 
+
+
 == Installation ==
 
 1. Upload `simple-security/` to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Go to Simple Security Plugin settings and enable Simple Security Plugin.
+
+Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1):
+
+http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1
+
+
+
+
 
 
 == Frequently Asked Questions ==
@@ -79,6 +89,9 @@ Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/test
 If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
+
+
+
 == Screenshots ==
 
 1. Access Log
@@ -89,7 +102,15 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 
+
+
 == Changelog ==
+
+
+= 1.1.2 =
+* added tab for tutorial video on plugin settings tabs
+* added a link for plugin tutorial page on our website on the plugin row meta links on plugins page
+
 
 
 = 1.1.1 =
