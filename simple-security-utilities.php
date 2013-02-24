@@ -85,6 +85,11 @@ class Simple_Security_Utilities{
 	}
 	
 	
+
+	
+	
+	
+	
 	public function uninstall_options(){
 			
 		//Delete old options

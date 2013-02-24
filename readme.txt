@@ -2,9 +2,9 @@
 Name: Simple Security
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
-Requires at least: 2.9
+Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -18,9 +18,9 @@ You can add a widget to the admin dashboard for logins and failed login attempts
 
 
 
-Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1):
+Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1):
 
-http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1
+http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
 
 
 
@@ -38,7 +38,8 @@ If we choose your testimonial or website we can link to your site and generate s
 
 Requirements:
 
-* PHP5
+* PHP v5.0+
+* WordPress v3.3+
 
 
 To-do:
@@ -52,9 +53,9 @@ To-do:
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Go to Simple Security Plugin settings and enable Simple Security Plugin.
 
-Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1):
+Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1):
 
-http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1
+http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
 
 
 
@@ -70,9 +71,9 @@ Check in your error.log if you can.
 Please send screenshots as well as a detailed description of the problem.
 
 
-Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1):
+Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1):
 
-http://www.youtube.com/watch?v=8S_cHDZfkRg&hd=1
+http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
 
 
 
@@ -105,6 +106,12 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 1.1.3 =
+* added button to clear access log feature, which will purge all records from the Access Log DB table.
+* added button to download access log as a CSV file.
+* updated tutorial videos, links, embeds.
+* updated readme file, plugin requires WordPress v3.3 for the help menu.
 
 
 = 1.1.2 =

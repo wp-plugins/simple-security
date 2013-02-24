@@ -37,6 +37,9 @@ class Simple_Security_Access_Log{
             'login_result'      => __('Login Result', 'simple_security'),
             'data'              => __('Data', 'simple_security')
         );
+		
+		
+
 
 	}
 	
@@ -45,6 +48,7 @@ class Simple_Security_Access_Log{
 	
 		add_action( 'admin_head', array($this, 'admin_header') );
 		add_action( 'admin_head', array($this, 'screen_options') );
+		
 		add_action( 'admin_menu', array($this, 'simple_security_admin_menu') );
 		
 	}
@@ -109,6 +113,29 @@ class Simple_Security_Access_Log{
             echo '</div>';
 
 	        $log_table->display();
+			
+			
+            echo '<div class="tablenav bottom">';
+				echo '<div class="alignleft actions">';
+					echo '<form onsubmit="return confirm(\'Do you really want to Clear the Access Log?\r\nThis action can not be reversed!\');" method="post" style="display: inline;">';
+						echo "<input type='submit' class='button' name='clear_access_log' value='Clear Access Log'>";
+					echo "</form>";
+					
+					echo "&nbsp;";
+					
+					echo '<form method="post" style="display: inline;">';
+						echo "<input type='submit' class='button' name='download_access_log' value='Download Access Log (CSV File)'>";
+					echo "</form>";
+					
+						//$log_table->views();
+				echo '</div>';
+
+                echo '<div class="alignright actions">';
+                //$mode = ( isset($_GET['mode']) ) ? esc_attr($_GET['mode']) : false;
+               // $log_table->view_switcher($mode);
+                echo '</div>';
+            echo '</div>';			
+			
 			
 			//add classes to table rows based on success or failure
 			echo "<script>";
@@ -332,6 +359,62 @@ class Simple_Security_Access_Log{
 		
         echo '</style>';
     }
+	
+	
+	
+	public function clear_access_log(){
+	
+		global $wpdb;
+		
+		//get initial count
+		$sql = "SELECT COUNT(*) FROM " . $this->db_table;
+		$initial_count = $wpdb->get_var($sql);
+		
+		//clear all records from the access log
+		$sql = "TRUNCATE TABLE " . $this->db_table;
+		$wpdb->query($sql);
+		
+		//get final count
+		$sql = "SELECT COUNT(*) FROM " . $this->db_table;
+		$final_count = $wpdb->get_var($sql);
+		
+		$result_count = $initial_count - $final_count;
+		
+		echo "<div class='updated'><p>$result_count Access Log Record(s) Deleted!</p></div>";
+	
+	}
+	
+	
+	
+	public function download_access_log(){
+		
+		global $wpdb;
+		
+		$sql = "SELECT * FROM " . $this->db_table;
+		$result = $wpdb->get_results($sql, ARRAY_A );
+		
+		$num_fields = count($result[0]);
+		
+		$headers = array();
+		for ($i = 0; $i < $num_fields; $i++) {
+			$headers[] = $wpdb->get_col_info('name' , $i);
+		}
+		
+		$fp = fopen('php://output', 'w'); 
+		if ($fp && $result) {     
+			header('Content-Type: text/csv');
+			header('Content-Disposition: attachment; filename="access_log_export.csv"');
+			header('Pragma: no-cache');    
+			header('Expires: 0');
+			fputcsv($fp, $headers); 
+			foreach($result as $row){
+				fputcsv($fp, array_values($row)); 
+			}
+
+		} 
+		
+		
+	}
 	
 }
 

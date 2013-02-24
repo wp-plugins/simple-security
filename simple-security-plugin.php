@@ -8,7 +8,7 @@ class Simple_Security_Plugin{
 	private $debug = false;
 
 	//plugin version number
-	private static $version = "1.1.2";
+	private static $version = "1.1.3";
 	
 	//holds the currently installed db version
 	private $installed_db_version;
@@ -131,6 +131,15 @@ class Simple_Security_Plugin{
 			$this->access_log = $access_log;
 			$this->access_log->db_table = $this->db_table;
 			$this->access_log->opt_name = $this->setting_name;
+			
+			if(array_key_exists("clear_access_log", $_POST)){
+				$this->access_log->clear_access_log();
+			}
+			
+			if(array_key_exists("download_access_log", $_POST)){
+				$this->access_log->download_access_log();
+				die();
+			}			
 			
 			$this->access_log->init();
 		}
@@ -417,7 +426,7 @@ class Simple_Security_Plugin{
 			}
 			</style>";
 		
-			$video_id = "8S_cHDZfkRg";
+			$video_id = "pMZ5oCUuX7k";
 			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/'.$video_id.'?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
@@ -594,7 +603,7 @@ class Simple_Security_Plugin{
 		}
 		</style>";
 
-		$video_id = "8S_cHDZfkRg";
+		$video_id = "pMZ5oCUuX7k";
 		echo sprintf( '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/%1$s?rel=0&vq=hd720" frameborder="0" allowfullscreen ></iframe></div>', $video_id);
 		
 	
