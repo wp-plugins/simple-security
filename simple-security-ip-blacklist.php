@@ -28,6 +28,14 @@ class Simple_Security_IP_Blacklist{
 
 	  	 	global $simple_security_ip_blacklist;
 	  	 	$simple_security_ip_blacklist = add_submenu_page( 'users.php', __('IP Address Blacklist', 'simple_security'), __('IP Blacklist', 'simple_security'), 'list_users', 'ip_blacklist', array(&$this, 'ip_blacklist') );
+
+
+			global $wp_version;
+	
+			if($simple_security_ip_blacklist && version_compare($wp_version, '3.3', '>=')){
+				add_action("load-". $simple_security_ip_blacklist, array('Simple_Security_Plugin', 'admin_help'));	
+			}
+
 	   }
 	   
     }
@@ -155,6 +163,7 @@ class Simple_Security_IP_Blacklist{
 		$tabs = array(
 			array('id' => 'basic_settings', 'title' => 'Basic Settings', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=basic_settings'),
 			array('id' => 'plugin_tutorial', 'title' => 'Plugin Tutorial Video', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=plugin_tutorial'),
+			array('id' => 'plugin_tutorial', 'title' => 'Plugin Upgrades', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=upgrade_plugin'),	
 			array('id' => 'ip_blacklist', 'title' => 'IP Address Blacklist', 'link' => 'users.php?page=ip_blacklist'),			
 			array('id' => 'access_log', 'title' => 'Access Log', 'link' => 'users.php?page=access_log'),
 		);

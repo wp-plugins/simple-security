@@ -8,7 +8,7 @@ class Simple_Security_Plugin{
 	private $debug = false;
 
 	//plugin version number
-	private static $version = "1.1.3";
+	private static $version = "1.1.4";
 	
 	//holds the currently installed db version
 	private $installed_db_version;
@@ -36,7 +36,7 @@ class Simple_Security_Plugin{
 	private $page_icon = "users"; 	
 	
 	//settings page title, to be displayed in menu and page headline
-	private $plugin_title = "Simple Security";
+	private static $plugin_title = "Simple Security";
 	
 	//page name
 	private $plugin_name = "simple-security";
@@ -97,7 +97,7 @@ class Simple_Security_Plugin{
         add_action( 'admin_menu', array(&$this, 'admin_menu') );
 		
 		//add help menu to settings page
-		add_filter( 'contextual_help', array(&$this,'admin_help'), 10, 3);	
+		//add_filter( 'contextual_help', array(&$this,'admin_help'), 10, 3);	
 		
 		// add plugin "Settings" action on plugin list
 		add_action('plugin_action_links_' . plugin_basename(SSec_LOADER), array(&$this, 'add_plugin_actions'));
@@ -347,7 +347,7 @@ class Simple_Security_Plugin{
 		
 			echo '<div id="icon-'.$this->page_icon.'" class="icon32"><br /></div>';
 			
-			echo "<h2>".$this->plugin_title." Plugin Settings</h2>";
+			echo "<h2>".self::$plugin_title." Plugin Settings</h2>";
 			
 			//$this->show_access_log_link();
 			
@@ -391,18 +391,27 @@ class Simple_Security_Plugin{
 
    	public function admin_menu() {
 		
-        $this->page_menu = add_options_page( $this->plugin_title, $this->plugin_title, 'manage_options',  $this->setting_name, array($this, 'plugin_settings_page') );
+        $this->page_menu = add_options_page( self::$plugin_title, self::$plugin_title, 'manage_options',  $this->setting_name, array($this, 'plugin_settings_page') );
+		
+		global $wp_version;
+
+   		if($this->page_menu && version_compare($wp_version, '3.3', '>=')){
+			add_action("load-". $this->page_menu, array($this, 'admin_help'));	
+		}
     }
 
 
-	public function admin_help($contextual_help, $screen_id, $screen){
-	
-		global $simple_security_access_log_page;
-		global $simple_security_ip_blacklist;
+	//public function admin_help($contextual_help, $screen_id, $screen){
+	public function admin_help(){
 		
-		if ($screen_id == $this->page_menu || $screen_id == $simple_security_access_log_page || $screen_id == $simple_security_ip_blacklist) {
+		$screen = get_current_screen();
+		
+		//global $simple_security_access_log_page;
+		//global $simple_security_ip_blacklist;
+		
+	//	if ($screen_id == $this->page_menu || $screen_id == $simple_security_access_log_page || $screen_id == $simple_security_ip_blacklist) {
 				
-			$support_the_dev = $this->display_support_us();
+			$support_the_dev = self::display_support_us();
 			$screen->add_help_tab(array(
 				'id' => 'developer-support',
 				'title' => "Support the Developer",
@@ -431,21 +440,26 @@ class Simple_Security_Plugin{
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
 				'title' => "Tutorial Video",
-				'content' => "<h2>{$this->plugin_title} Tutorial Video</h2><p>$video_code</p>"
+				'content' => "<h2>".self::$plugin_title." Tutorial Video</h2><p>$video_code</p>"
 			));
 			
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-support',
 				'title' => "Plugin Support",
-				'content' => "<h2>{$this->plugin_title} Support</h2><p>For {$this->plugin_title} Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+				'content' => "<h2>".self::$plugin_title." Support</h2><p>For ".self::$plugin_title." Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
 			
 			
+			$screen->add_help_tab(array(
+				'id' => 'upgrade_plugin',
+				'title' => 'Plugin Upgrades', 
+				'content' => self::get_plugin_upgrades()		
+			));	
 
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			
-		}
+		//}
 			
 		
 
@@ -504,7 +518,7 @@ class Simple_Security_Plugin{
 	
 	
 		$upgrade = "<p>
-			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-security-ultra/'  target='_blank'>Upgrade to Simple Security Ultra!</a><br />
+			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/'  target='_blank'>Upgrade to Simple Security Ultra!</a><br />
 			<br />
 			<b>Features:</b><br />
 			-Email Alert Notifications<br />
@@ -572,8 +586,135 @@ class Simple_Security_Plugin{
 			'callback' => array(&$this, 'show_plugin_tutorual')
 		);
 		$this->settings_page->add_section( $plugin_tutorial );
+		
+		
+		$upgrade_plugin = array(
+			'id' => 'upgrade_plugin',
+			'title' => __( 'Plugin Upgrades', $this->plugin_name ),
+			'callback' => array(&$this, 'show_plugin_upgrades')
+		);
+		$this->settings_page->add_section( $upgrade_plugin );
 	}
  
+ 
+ 
+ 
+ 
+ 		
+	public function get_plugin_upgrades(){
+		ob_start();
+		self::show_plugin_upgrades();
+		return ob_get_clean();	
+	}
+	
+	
+	public function show_plugin_upgrades(){
+		
+		$html = "<style>
+			ul.upgrade_features li { list-style-type: disc; }
+			ul.upgrade_features  { margin-left:30px;}
+		</style>";
+		
+		$html .= "<script>
+		
+			function  simple_security_upgrade(){
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/');
+        		return false;
+			}
+			
+			
+			
+			function  try_simple_optimizer(){
+        		window.open('http://wordpress.org/extend/plugins/simple-optimizer/');
+        		return false;
+			}
+			
+			function  try_simple_backup(){
+        		window.open('http://wordpress.org/extend/plugins/simple-backup/');
+        		return false;
+			}	
+			
+			
+			
+			function  simple_backup_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/');
+        		return false;
+			}	
+			
+			function  simple_optimizer_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-optimizer/');
+        		return false;
+			}				
+
+			function  simple_security_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-security/');
+        		return false;
+			}			
+			
+				
+		</script>";
+		
+
+		$html .= "</form><h2>Upgrade to Simple Security Ultra Today!</h2>";
+		
+		$html .= "<p><b>Premium Features include:</b></p>";
+		
+		$html .= "<ul class='upgrade_features'>";	
+		$html .= "<li>Configurable email alert notifications when selected conditions are met</li>";
+		$html .= "<li>Receive an optional email alert when new IP addresses are added to Blacklist</li>";		
+		$html .= "<li>Receive an optional email alert after a failed login attempt</li>";	
+		$html .= "<li>Receive an optional email alert after a successful login</li>";			
+		$html .= "<li>Lifetime Priority Support and Update License</li>";
+		$html .= "</ul>";
+		
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Upgrade to Simple Security Ultra &raquo;' onclick='return simple_security_upgrade()'>&nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return simple_security_learn_more()'>";
+		$html .= "</p>";
+		$html .=  "</div>";
+
+
+		$html .= "<hr>";
+		
+		
+		$html .= "<h2>Also Try Simple Optimizer!</h2>";
+		$html .= "<p>Simple Optimizer can help keep your website running quickly and smoothly by cleaning up the WordPress Database of un-used and un-necessary information.</p>";
+		
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Try Simple Optimizer &raquo;' onclick='return try_simple_optimizer()'>&nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return simple_optimizer_learn_more()'>";
+		$html .= "</p>";	
+		$html .=  "</div>";
+	
+	
+		$html .= "<hr>";
+		
+		
+		$html .= "<h2>Also Try Simple Backup!</h2>";
+		$html .= "<p>Simple Backup can quickly and easily create a Full Backup of your WordPress Database and Website Files!</p>";
+				
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Try Simple Backup &raquo;' onclick='return try_simple_backup()'>&nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return simple_backup_learn_more()'>";
+		$html .= "</p>";	
+		$html .=  "</div>";
+
+
+		
+		echo $html;
+	}
+
+
+ 
+ 
+ 
+
+
+
+
 
 	// displays the plugin options array
 	public function show_plugin_settings(){
@@ -627,7 +768,7 @@ class Simple_Security_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SSec_LOADER)) {
-			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-security-ultra/';
+			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
 			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/';
@@ -643,7 +784,7 @@ class Simple_Security_Plugin{
 	
 	public function display_support_us(){
 				
-		$string = '<p><b>Thank You for using the '.$this->plugin_title.' Plugin for WordPress!</b></p>';
+		$string = '<p><b>Thank You for using the '.self::$plugin_title.' Plugin for WordPress!</b></p>';
 		$string .= "<p>Please take a moment to <b>Support the Developer</b> by doing some of the following items:</p>";
 		
 		$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';

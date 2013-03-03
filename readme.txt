@@ -4,8 +4,8 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.1.3
-Donate link: http://MyWebsiteAdvisor.com/donations
+Stable tag: 1.1.4
+Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
 Access Log to track Logins and Failed Login Attempts
@@ -18,6 +18,16 @@ You can add a widget to the admin dashboard for logins and failed login attempts
 
 
 
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/">**Upgrade to Simple Security Ultra**</a> for advanced features including:
+
+* Configurable email alert notifications when selected conditions are met
+* Receive an optional email alert when new IP addresses are added to Blacklist
+* Receive an optional email alert after a failed login attempt
+* Receive an optional email alert after a successful login
+* Lifetime Priority Support and Update License
+
+
+
 Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1):
 
 http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
@@ -26,14 +36,12 @@ http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
 
 Developer Website: http://MyWebsiteAdvisor.com/
 
+Plugin Support: http://MyWebsiteAdvisor.com/support/
+
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
 
 Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/
 
-
-We are looking for testimonials and live examples of our plugins on your website!  
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/  
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
 Requirements:
@@ -53,6 +61,8 @@ To-do:
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Go to Simple Security Plugin settings and enable Simple Security Plugin.
 
+
+
 Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1):
 
 http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
@@ -71,6 +81,17 @@ Check in your error.log if you can.
 Please send screenshots as well as a detailed description of the problem.
 
 
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/">**Upgrade to Simple Security Ultra**</a> for advanced features including:
+
+* Configurable email alert notifications when selected conditions are met
+* Receive an optional email alert when new IP addresses are added to Blacklist
+* Receive an optional email alert after a failed login attempt
+* Receive an optional email alert after a successful login
+* Lifetime Priority Support and Update License
+
+
+
 Check out the [Simple Security Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1):
 
 http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
@@ -79,16 +100,11 @@ http://www.youtube.com/watch?v=pMZ5oCUuX7k&hd=1
 
 Developer Website: http://MyWebsiteAdvisor.com/
 
+Plugin Support: http://MyWebsiteAdvisor.com/support/
+
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
 
 Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/
-
-
-
-We are looking for testimonials and live examples of our plugins on your website!
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
-
 
 
 
@@ -106,6 +122,13 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 1.1.4 =
+* updated contextual help, removed depricated filter and updated to preferred method
+* added plugin upgrades info tab on plugin settings page
+* added uninstall and deactivation funtions to clear plugin settings
+* updated readme file
+
 
 = 1.1.3 =
 * added button to clear access log feature, which will purge all records from the Access Log DB table.

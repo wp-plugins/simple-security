@@ -59,7 +59,11 @@ class Simple_Security_Access_Log{
 		
        	$simple_security_access_log_page = add_submenu_page( 'users.php', __('Simple Access Log', 'simple_security'), __('Access Log', 'simple_security'), 'list_users', 'access_log', array(&$this, 'log_manager') );
 	   
-	   
+		global $wp_version;
+
+   		if($simple_security_access_log_page && version_compare($wp_version, '3.3', '>=')){
+			add_action("load-". $simple_security_access_log_page, array('Simple_Security_Plugin', 'admin_help'));	
+		}	   
     }
 	
 	
@@ -164,6 +168,7 @@ class Simple_Security_Access_Log{
 		$tabs = array(
 			array('id' => 'basic_settings', 'title' => 'Basic Settings', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=basic_settings'),
 			array('id' => 'plugin_tutorial', 'title' => 'Plugin Tutorial Video', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=plugin_tutorial'),
+			array('id' => 'plugin_tutorial', 'title' => 'Plugin Upgrades', 'link' => admin_url().'options-general.php?page=simple-security-settings&tab=upgrade_plugin'),			
 			array('id' => 'ip_blacklist', 'title' => 'IP Address Blacklist', 'link' => 'users.php?page=ip_blacklist'),			
 			array('id' => 'access_log', 'title' => 'Access Log', 'link' => 'users.php?page=access_log'),
 

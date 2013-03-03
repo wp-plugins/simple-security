@@ -3,12 +3,42 @@
 Plugin Name: Simple Security
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
 Description: Access Log to track Logins and Failed Login Attempts
-Version: 1.1.3
+Version: 1.1.4
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */
 
 register_activation_hook(__FILE__, 'simple_security_activate');
+register_deactivation_hook(__FILE__, "simple_security_deactivate");
+register_uninstall_hook(__FILE__, "simple_security_uninstall");
+
+
+function simple_security_deactivate(){		
+		
+		//delete plugin settings
+		delete_option('simple-security-settings');
+		delete_option('simple-security-ip-blacklist');
+	
+}
+
+
+function simple_security_uninstall(){
+	
+		//Delete old options
+		delete_option('simple_security_db_version');
+		delete_option('simple_security_plugin');
+		delete_option('simple_security');
+		delete_option('simple_security_installed');
+		delete_option('simple_security_ip_blacklist');
+		
+		delete_transient( 'simple_security_nag' );
+		
+		
+		//delete new options
+		delete_option('simple-security-settings');
+		delete_option('simple-security-ip-blacklist');
+	
+}
 
 
 
@@ -24,6 +54,7 @@ function simple_security_activate() {
 	}
 	
 }
+
 
 
 // require Plugin if PHP 5 installed

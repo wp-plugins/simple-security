@@ -12,66 +12,17 @@ class Simple_Security_Utilities{
 	
 	
 	public function init(){
-	
-		//update the settings system
-		//register_activation_hook( SSec_LOADER, array(&$this, 'migrate_options') );	
-		
+			
 		//add db table
 		register_activation_hook( SSec_LOADER, array(&$this, 'install_db') );	
 		
 		//drop db table
 		register_uninstall_hook( SSec_LOADER, array(&$this, 'uninstall_db') );
-		//register_deactivation_hook( SSec_LOADER, array(&$this, 'uninstall_db') );	
-		
-		//cleanup options
-		register_uninstall_hook( SSec_LOADER, array(&$this, 'uninstall_options') );	
-		//register_deactivation_hook( SSec_LOADER, array(&$this, 'uninstall_options') );		
-	
-	}
-	
-	
-	
-	
-	public function migrate_options(){
-	
-		//no longer used
-		delete_option('simple_security_installed');
-	
-	
-		//migrate ip blacklist
-		$old_blacklist = get_option('simple_security_ip_blacklist', array());
-		$new_blacklist = get_option('simple-security-ip-blacklist', array());
-		update_option('simple-security-ip-blacklist', array_merge($new_blacklist, $old_blacklist));
-		delete_option('simple_security_ip_blacklist');
-	
-	
-	
-	
-		//migrate simple security db version
- 		$old_db_ver = get_option('simple_security_db_version');
-		$options = get_option($this->setting_name);
-		$options['installed_db_version'] = $old_db_ver;
-		update_option( $this->setting_name, $options );
-		delete_option('simple_security_db_version');
-		
-		
-		
-		
-		//migrate simple security plugin settings
- 		$old_settings = get_option('simple_security_plugin');
-		$updated_settings = array();
-		foreach($old_settings as $key=>$val){
-			$updated_settings[$key] = (true === $val) ? "true" : "false";
-		}
-		
-		$options = get_option($this->setting_name);
-		$options['basic_settings'] = $updated_settings;
-		update_option( $this->setting_name, $options );
-		delete_option('simple_security_plugin');
-		
 		
 	}
 	
+	
+
 	
 
 	public function uninstall_db(){
@@ -84,29 +35,7 @@ class Simple_Security_Utilities{
 	
 	}
 	
-	
 
-	
-	
-	
-	
-	public function uninstall_options(){
-			
-		//Delete old options
-		delete_option('simple_security_db_version');
-		delete_option('simple_security_plugin');
-		delete_option('simple_security');
-		delete_option('simple_security_installed');
-		delete_option('simple_security_ip_blacklist');
-		
-		delete_transient( 'simple_security_nag' );
-		
-		
-		//delete new options
-		delete_option('simple-security-settings');
-		delete_option('simple-security-ip-blacklist');
-	}
-	
 	
 	
 	public function install_db(){
