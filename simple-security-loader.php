@@ -3,7 +3,7 @@
 Plugin Name: Simple Security
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
 Description: Access Log to track Logins and Failed Login Attempts
-Version: 1.1.4
+Version: 1.1.5
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */

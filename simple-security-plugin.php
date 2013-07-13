@@ -8,7 +8,7 @@ class Simple_Security_Plugin{
 	private $debug = false;
 
 	//plugin version number
-	private static $version = "1.1.4";
+	private static $version = "1.1.5";
 	
 	//holds the currently installed db version
 	private $installed_db_version;
@@ -133,7 +133,9 @@ class Simple_Security_Plugin{
 			$this->access_log->opt_name = $this->setting_name;
 			
 			if(array_key_exists("clear_access_log", $_POST)){
-				$this->access_log->clear_access_log();
+				
+				add_action('admin_init', array($this->access_log, 'clear_access_log'));
+				//$this->access_log->clear_access_log();
 			}
 			
 			if(array_key_exists("download_access_log", $_POST)){

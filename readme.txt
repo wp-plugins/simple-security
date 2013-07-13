@@ -3,8 +3,8 @@ Name: Simple Security
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 3.3
-Tested up to: 3.5
-Stable tag: 1.1.4
+Tested up to: 3.5.2
+Stable tag: 1.1.5
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -122,6 +122,12 @@ Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-t
 
 
 == Changelog ==
+
+
+= 1.1.5 =
+* fixed issue with clearing access log and warning about session start/headers already sent.
+* tested for compatibility with WP v3.5.2
+
 
 = 1.1.4 =
 * updated contextual help, removed depricated filter and updated to preferred method
