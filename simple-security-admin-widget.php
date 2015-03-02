@@ -1,15 +1,16 @@
 <?php
 
-if( ! class_exists( 'WP_List_Table' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
-}
+//if( ! class_exists( 'WP_List_Table' ) ) {
+	//require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+//}
 
 		
-class Access_Log_Admin_Widget extends WP_List_Table {
-		
-	function __construct(){
-		 $this->prepare_items();	 
-	}
+//class Access_Log_Admin_Widget extends WP_List_Table {
+class Access_Log_Admin_Widget  {
+			
+	//function __construct(){
+		// $this->prepare_items();	 
+	//}
 
 	function add_admin_widget() {
 		wp_add_dashboard_widget('simple_security_admin_widget', 'Simple Security Access Log', array($this, 'display_admin_widget') );	
@@ -19,6 +20,69 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 		$this->build_admin_widget_table();
 	} 
 	
+	
+	
+	
+	function build_admin_widget_table(){
+		
+		global $access_log, $wpdb;
+		
+		echo "<h3>Recent Login Attempts</h3>";
+		
+	
+		$sql = "SELECT * FROM {$access_log->db_table} ORDER BY time DESC LIMIT 5";
+		$result = $wpdb->get_results($sql, ARRAY_A );
+		
+		
+		$this->build_html_table($result);
+		
+		
+	}
+	
+	
+	
+	function build_html_table($result){
+		
+		$i =1;
+		
+		$columns = array(
+			'user_login'    => 'Username',
+			'login_result'	=> 'Login Result',
+			'ip' 			=> 'IP Address',
+			'time'      	=> 'Date/Time'
+		);
+		
+		
+		echo "<table class='wp-list-table widefat fixed'>";
+			
+			printf("<tr><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>", $columns['user_login'], $columns['login_result'], $columns['ip'], $columns['time']);
+		
+			foreach($result as $row){
+				
+				$alt = $i%2 ? "class='alternate'" : "";
+				
+				$login_result = $row['login_result'] ? "Success" : "Failed";
+				
+				printf("<tr %s><td>%s</td><td>%s</td><td nowrap>%s</td><td>%s</td></tr>", $alt, $row['user_login'], $login_result, $row['ip'], $row['time']);
+			
+				$i++;
+			}
+		
+		echo "</table>";
+		
+		
+		echo '<p><a href="'.admin_url('users.php?page=access_log').'">View Full Access Log</a></p>';
+		
+	}
+	
+	
+	
+	
+	
+
+
+	/**
+
 
 	function build_admin_widget_table(){
 		$parent_args = array(
@@ -29,7 +93,7 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 		
 		
 		
-		parent::__construct($parent_args);
+		//parent::__construct($parent_args);
 		//$this->extra_tablenav('bottom');
 		echo "<style>
 			span.failure {color:red; font-weight: bold;}
@@ -39,7 +103,7 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 	
 		//echo '<a href="'.get_option('siteurl').'/wp-admin/users.php?page=access_log"><p class="sub">Recent Logins</p></a>'; 
 		
-	  	$this->display(); 
+	  	//$this->display(); 
 							
 	}
 
@@ -72,12 +136,7 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 
 
 	function get_columns(){
-		$columns = array(
-			'user_login'    => 'Username',
-			'login_result'	=> 'Login Result',
-			'ip' 			=> 'IP Address',
-			'time'      	=> 'Date/Time'
-		);
+		
 	  	return $columns;
 	}
 	
@@ -130,7 +189,9 @@ class Access_Log_Admin_Widget extends WP_List_Table {
 		  
 	  }
 	}
-
+	
+	
+	**/
 
 }
 

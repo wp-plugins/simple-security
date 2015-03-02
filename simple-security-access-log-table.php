@@ -188,7 +188,7 @@ class Simple_Security_Access_Log_List_Table extends WP_List_Table{
 
         //if date filter is set, adjust views label to reflect the date
         $date_label = false;
-        if( isset($_GET['datefilter']) && !empty($_GET['datefilter']) ){
+        if( isset($_GET['datefilter']) && !empty($_GET['datefilter']) && is_numeric($_GET['datefilter']) ){
             $year = substr($_GET['datefilter'], 0, 4);
             $month = substr($_GET['datefilter'], -2);
             $timestamp = mktime(0, 0, 0, $month, 1, $year);
@@ -203,9 +203,13 @@ class Simple_Security_Access_Log_List_Table extends WP_List_Table{
         if( isset($args['mode']) )
             $param['mode'] = $args['mode'];
 
-        if( isset($args['datefilter']) )
+        if( isset($args['datefilter']) && is_numeric($args['datefilter']) ){
             $param['datefilter'] = $args['datefilter'];
 
+
+		}
+		
+		
         //creating base url for the views links
         $menu_page_url = menu_page_url('access_log', false);
         ( is_array($param) && !empty($param) ) ? $url = add_query_arg( $param, $menu_page_url) : $url = $menu_page_url;

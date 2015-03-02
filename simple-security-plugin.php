@@ -8,7 +8,7 @@ class Simple_Security_Plugin{
 	private $debug = false;
 
 	//plugin version number
-	private static $version = "1.1.5";
+	private static $version = "1.1.6";
 	
 	//holds the currently installed db version
 	private $installed_db_version;
@@ -459,7 +459,7 @@ class Simple_Security_Plugin{
 				'content' => self::get_plugin_upgrades()		
 			));	
 
-			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
+			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			
 		//}
 			
@@ -502,16 +502,16 @@ class Simple_Security_Plugin{
 	
 	public function get_settings_sidebar(){
 	
-		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-security/' target='_blank'>Plugin Homepage</a></p>
+		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/plugins/simple-security/' target='_blank'>Plugin Homepage</a></p>
 			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 			<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
 	
 	
-		$more_plugins = "<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
+		$more_plugins = "<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
 			<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
-			<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";
+			<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";
 	
 		$follow_us = "<p><a href='http://facebook.com/MyWebsiteAdvisor/'  target='_blank'>Follow us on Facebook!</a></p>
 			<p><a href='http://twitter.com/MWebsiteAdvisor/'  target='_blank'>Follow us on Twitter!</a></p>
@@ -520,7 +520,7 @@ class Simple_Security_Plugin{
 	
 	
 		$upgrade = "<p>
-			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/'  target='_blank'>Upgrade to Simple Security Ultra!</a><br />
+			<a href='http://mywebsiteadvisor.com/plugins/simple-security/'  target='_blank'>Upgrade to Simple Security Ultra!</a><br />
 			<br />
 			<b>Features:</b><br />
 			-Email Alert Notifications<br />
@@ -620,7 +620,7 @@ class Simple_Security_Plugin{
 		$html .= "<script>
 		
 			function  simple_security_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-security/');
         		return false;
 			}
 			
@@ -639,17 +639,17 @@ class Simple_Security_Plugin{
 			
 			
 			function  simple_backup_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-backup/');
         		return false;
 			}	
 			
 			function  simple_optimizer_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-optimizer/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-optimizer/');
         		return false;
 			}				
 
 			function  simple_security_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-security/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-security/');
         		return false;
 			}			
 			
@@ -770,7 +770,7 @@ class Simple_Security_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SSec_LOADER)) {
-			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/';
+			$upgrade_url = 'http://mywebsiteadvisor.com/plugins/simple-security/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
 			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/';
@@ -794,7 +794,7 @@ class Simple_Security_Plugin{
 		
 		$string .= "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
 		$string .= "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
-		$string .= "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+		$string .= "<li><a href='http://mywebsiteadvisor.com/plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
 	
 		return $string;
 	}

@@ -3,8 +3,8 @@ Name: Simple Security
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Admin, Security
 Requires at least: 3.3
-Tested up to: 3.5.2
-Stable tag: 1.1.5
+Tested up to: 4.1.1
+Stable tag: 1.1.6
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -18,7 +18,7 @@ You can add a widget to the admin dashboard for logins and failed login attempts
 
 
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/">**Upgrade to Simple Security Ultra**</a> for advanced features including:
+<a href="http://mywebsiteadvisor.com/plugins/simple-security/">**Upgrade to Simple Security Ultra**</a> for advanced features including:
 
 * Configurable email alert notifications when selected conditions are met
 * Receive an optional email alert when new IP addresses are added to Blacklist
@@ -38,7 +38,7 @@ Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Support: http://MyWebsiteAdvisor.com/support/
 
-Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
+Plugin Page: http://MyWebsiteAdvisor.com/plugins/simple-security/
 
 Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/
 
@@ -82,7 +82,7 @@ Please send screenshots as well as a detailed description of the problem.
 
 
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-security-ultra/">**Upgrade to Simple Security Ultra**</a> for advanced features including:
+<a href="http://mywebsiteadvisor.com/plugins/simple-security/">**Upgrade to Simple Security Ultra**</a> for advanced features including:
 
 * Configurable email alert notifications when selected conditions are met
 * Receive an optional email alert when new IP addresses are added to Blacklist
@@ -102,7 +102,7 @@ Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Support: http://MyWebsiteAdvisor.com/support/
 
-Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-security/
+Plugin Page: http://MyWebsiteAdvisor.com/plugins/simple-security/
 
 Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-tutorial/
 
@@ -122,6 +122,12 @@ Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-security-t
 
 
 == Changelog ==
+
+
+= 1.1.6 =
+* Fixed Two Low Risk XSS Vulnerabilities (HTB23244)
+* Tested for compatibility with WP v4.1.1
+* Updated links in readme and plugin for support, updates, etc
 
 
 = 1.1.5 =

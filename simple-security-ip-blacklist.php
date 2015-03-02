@@ -49,7 +49,7 @@ class Simple_Security_IP_Blacklist{
 		$blacklist = array();		
 		if(isset($_POST['action']) && "add_blacklist_ip" == $_POST['action'] && is_admin()){
 			foreach($_POST['simple_security_ip_blacklist'] as $ip){
-				if($ip != ''){
+				if(!empty($ip) && filter_var($ip, FILTER_VALIDATE_IP)){
 					$blacklist[] = $ip;
 				}
 			}

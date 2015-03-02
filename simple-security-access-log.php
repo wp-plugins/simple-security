@@ -293,7 +293,7 @@ class Simple_Security_Access_Log{
             $where['result'] = "login_result = '{$_GET['result']}'";
         }
 		
-        if( isset($_GET['datefilter']) && '' != $_GET['datefilter'] ){
+        if( isset($_GET['datefilter']) && !empty( $_GET['datefilter'] ) && is_numeric($_GET['datefilter']) ){
             $year = substr($_GET['datefilter'], 0, 4);
             $month = substr($_GET['datefilter'], -2);
             $where['datefilter'] = "YEAR(time) = {$year} AND MONTH(time) = {$month}";
@@ -318,7 +318,7 @@ class Simple_Security_Access_Log{
             //represent month in double digits
             $timestamp = mktime(0, 0, 0, $row->month, 1, $row->year);
             $month = (strlen($row->month) == 1) ? '0' . $row->month : $row->month;
-            $datefilter = ( isset($_GET['datefilter']) ) ? $_GET['datefilter'] : false;
+            $datefilter = ( isset($_GET['datefilter']) && !empty( $_GET['datefilter'] ) && is_numeric($_GET['datefilter']) ) ? $_GET['datefilter'] : false;
             $option .= '<option value="' . $row->year . $month . '" ' . selected($row->year . $month, $datefilter, false) . '>' . date('F', $timestamp) . ' ' . $row->year . '</option>';
         }
 
